@@ -165,7 +165,7 @@ node --test
 MIT
 ## 已验证
 
-在 Magpie `0.1.2454` + 生产 77625 账号（`Ccat_Q`）上验证：
+在 Magpie `0.1.2454` 上验证：
 
 - 账号登录成功，账号保存为 OAuth，API Key 自动创建；
 - `magpie provider test 77625 x-deepseek-v4.1-flash` 返回 2xx；
