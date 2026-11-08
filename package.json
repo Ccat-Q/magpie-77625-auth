@@ -1,0 +1,37 @@
+{
+  "name": "magpie-77625-auth",
+  "version": "0.1.0",
+  "description": "Magpie/OpenCode provider plugin for 77625 Router: sign-in, daily check-in credits and remaining balance.",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./server": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "lib/*.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "magpie-plugin",
+    "77625",
+    "provider"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  },
+  "magpie": {
+    "name": "77625路由站",
+    "icon": "https://ly.77625.xyz/static/logo-77625.png",
+    "summary": {
+      "zh": "使用 77625 路由站账号登录：每日签到领积分，查询剩余积分。",
+      "en": "Sign in with 77625 Router: daily check-in credits and remaining balance."
+    },
+    "maxConcurrency": 2
+  }
+}

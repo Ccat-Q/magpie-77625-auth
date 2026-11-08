@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.env
+.env.*
+.DS_Store
+coverage/
+plugin-auth.json
+plugin-checkin.json
+plugin-providers.json
+tmp/
