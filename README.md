@@ -1,5 +1,7 @@
 # 77625路由站 for Magpie / OpenCode
 
+<p align="center"><img src="icon.png" width="96" height="96" alt="77625 图标"></p>
+
 一个 Magpie（以及 OpenCode）供应商插件，用来登录 [77625路由站](https://ly.77625.xyz)：
 
 - **注册提供商**：把 `77625` 声明为 Magpie 供应商，agent 可直接选它的模型。
@@ -161,3 +163,12 @@ node --test
 ## 许可
 
 MIT
+## 已验证
+
+在 Magpie `0.1.2454` + 生产 77625 账号（`Ccat_Q`）上验证：
+
+- 账号登录成功，账号保存为 OAuth，API Key 自动创建；
+- `magpie provider test 77625 x-deepseek-v4.1-flash` 返回 2xx；
+- `magpie quota 77625` 显示积分余额与今日调用/消费；
+- 手动触发签到返回 `done`（当天已签到），记录写入 `plugin-checkin.json`；
+- 删除手工 provider 后插件接管 `77625`，自动组 `auto-deepseek-v4-1-flash` 的成员与 `off` 状态保持。
