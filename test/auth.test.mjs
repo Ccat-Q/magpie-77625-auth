@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { _internal as I } from "../index.mjs";
+import { SevenSevenAuthPlugin, _internal as I } from "../index.mjs";
 import { clientStub, makeFetch, reply, sessionAuth } from "./helpers.mjs";
 
 test("password login creates a key, stores the cookie and the password for refresh", async () => {
@@ -110,7 +110,7 @@ test("cookie login validates the session and can create a key", async () => {
 
   assert.equal(auth.type, "oauth");
   assert.equal(auth.access, "session=ok; cf=1");
-  assert.equal(auth.refresh, undefined);
+  assert.equal(auth.refresh, "");
   assert.equal(auth.expires, 0);
   assert.equal(auth.apiKey, "sk-cookie");
   assert.equal(calls[0].path, "/api/auth/me");
@@ -246,4 +246,37 @@ test("a 429 login is backed off locally instead of hammering the site", async ()
     (error) => error.code === "rate_limited",
   );
   assert.equal(calls, 1);
+});
+
+
+test("oauth authorize returns callback() so Magpie can complete the sign-in", async () => {
+  const realFetch = globalThis.fetch;
+  const { fetchImpl } = makeFetch(({ path, method }) => {
+    switch (`${method} ${path}`) {
+      case "POST /api/auth/login":
+        return reply(200, {}, { "set-cookie": "session=cb; Max-Age=60" });
+      case "GET /api/auth/me":
+        return reply(200, { username: "callback-user" });
+      case "GET /api/keys/groups":
+        return reply(200, { groups: [{ name: "default", allowed: true }] });
+      case "POST /api/keys":
+        return reply(200, { key: "sk-cb" });
+      default:
+        return reply(404, {});
+    }
+  });
+  globalThis.fetch = fetchImpl;
+  try {
+    const hooks = await SevenSevenAuthPlugin({ client: clientStub() });
+    const started = await hooks.auth.methods[0].authorize({
+      username: "callback-user",
+      password: "pw",
+    });
+    assert.equal(typeof started.callback, "function");
+    const result = await started.callback();
+    assert.equal(result.type, "success");
+    assert.equal(result.apiKey, "sk-cb");
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });

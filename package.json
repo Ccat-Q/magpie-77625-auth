@@ -1,6 +1,6 @@
 {
   "name": "magpie-77625-auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Magpie/OpenCode provider plugin for 77625 Router: sign-in, daily check-in credits and remaining balance.",
   "type": "module",
   "main": "./index.mjs",
@@ -11,6 +11,7 @@
   "files": [
     "index.mjs",
     "lib/*.mjs",
+    "icon.svg",
     "README.md",
     "LICENSE"
   ],
@@ -27,7 +28,7 @@
   },
   "magpie": {
     "name": "77625路由站",
-    "icon": "https://ly.77625.xyz/static/logo-77625.png",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTI4IDEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSI3NzYyNSI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMTc0ZDNiIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iIzIwNjM0YiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM0ZDlkNmUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiByeD0iMjgiIGZpbGw9InVybCgjZykiLz4KICA8Y2lyY2xlIGN4PSIxMDAiIGN5PSIyOCIgcj0iMTAiIGZpbGw9IiNlYWY2ZWYiIG9wYWNpdHk9IjAuMTgiLz4KICA8Y2lyY2xlIGN4PSIyOCIgY3k9IjEwMCIgcj0iMTYiIGZpbGw9IiNlYWY2ZWYiIG9wYWNpdHk9IjAuMTIiLz4KICA8dGV4dCB4PSI2NCIgeT0iODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiCiAgICAgICAgZm9udC1mYW1pbHk9InN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgJ1NlZ29lIFVJJywgUm9ib3RvLCBzYW5zLXNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI4MDAiIGxldHRlci1zcGFjaW5nPSIxIiBmaWxsPSIjZmZmZmZmIj43NzYyNTwvdGV4dD4KPC9zdmc+Cg==",
     "summary": {
       "zh": "使用 77625 路由站账号登录：每日签到领积分，查询剩余积分。",
       "en": "Sign in with 77625 Router: daily check-in credits and remaining balance."

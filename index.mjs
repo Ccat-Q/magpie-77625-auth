@@ -1,4 +1,5 @@
 import { V1_URL } from "./lib/api.mjs";
+import { ICON } from "./lib/icon.mjs";
 import {
   DEFAULT_LIMITS,
   MODEL_LIMITS,
@@ -23,7 +24,6 @@ import {
   ensureSession,
 } from "./lib/session.mjs";
 
-const ICON = "https://ly.77625.xyz/static/logo-77625.png";
 const FALLBACK_MODELS = staticModels();
 
 function success(fields) {
@@ -81,20 +81,28 @@ export const SevenSevenAuthPlugin = async ({ client }) => ({
             placeholder: "分组名称",
           },
         ],
-        async authorize(inputs = {}, options = {}) {
-          try {
-            const { auth } = await loginWithPasswordFlow({
-              username: inputs.username,
-              password: inputs.password,
-              apiKey: inputs.apiKey,
-              keyGroup: inputs.keyGroup,
-              signal: options.signal,
-              fetchImpl: options.fetch,
-            });
-            return success(auth);
-          } catch (error) {
-            return failed(error);
-          }
+        async authorize(inputs = {}) {
+          const params = {
+            username: inputs.username,
+            password: inputs.password,
+            apiKey: inputs.apiKey,
+            keyGroup: inputs.keyGroup,
+          };
+          // Magpie's OAuth flow always calls callback() after authorize(); do
+          // the network work there so a slow site does not look like a hang
+          // in the sign-in dialog.
+          return {
+            method: "auto",
+            instructions: "正在完成 77625 登录…",
+            async callback() {
+              try {
+                const { auth } = await loginWithPasswordFlow(params);
+                return success(auth);
+              } catch (error) {
+                return failed(error);
+              }
+            },
+          };
         },
       },
       {
@@ -120,19 +128,24 @@ export const SevenSevenAuthPlugin = async ({ client }) => ({
             placeholder: "分组名称",
           },
         ],
-        async authorize(inputs = {}, options = {}) {
-          try {
-            const { auth } = await loginWithCookieFlow({
-              cookie: inputs.cookie,
-              apiKey: inputs.apiKey,
-              keyGroup: inputs.keyGroup,
-              signal: options.signal,
-              fetchImpl: options.fetch,
-            });
-            return success(auth);
-          } catch (error) {
-            return failed(error);
-          }
+        async authorize(inputs = {}) {
+          const params = {
+            cookie: inputs.cookie,
+            apiKey: inputs.apiKey,
+            keyGroup: inputs.keyGroup,
+          };
+          return {
+            method: "auto",
+            instructions: "正在完成 77625 登录…",
+            async callback() {
+              try {
+                const { auth } = await loginWithCookieFlow(params);
+                return success(auth);
+              } catch (error) {
+                return failed(error);
+              }
+            },
+          };
         },
       },
       {
