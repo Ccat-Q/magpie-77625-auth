@@ -16,6 +16,7 @@ test("usage maps credits and today's calls into balance windows", async () => {
     }
     if (path === "/api/account/stats") {
       return reply(200, {
+        total_cost: 500,
         daily: [
           { date: "2000-01-01", calls: 99, cost: 999 },
           { date: today, calls: 3, cost: 12.5 },
@@ -31,9 +32,15 @@ test("usage maps credits and today's calls into balance windows", async () => {
   assert.equal(usage.user, "alice");
   assert.equal(usage.balance, `${I.formatCredits(1234.5)} 积分`);
   assert.equal(usage.windows.length, 2);
-  assert.equal(usage.windows[0].name, "积分余额");
-  assert.equal(usage.windows[0].balance, 1234.5);
+  assert.equal(usage.windows[0].name, "积分余额（估算）");
+  assert.equal(usage.windows[0].amount, 500);
+  assert.equal(usage.windows[0].limit, 1734.5);
+  assert.ok(Math.abs(usage.windows[0].used - (500 / 1734.5) * 100) < 0.0001);
   assert.equal(usage.windows[0].unit, "积分");
+  assert.equal(
+    usage.windows[0].display,
+    `${I.formatCredits(1234.5)} / ${I.formatCredits(1734.5)} 积分`,
+  );
   assert.equal(usage.windows[1].name, "今日");
   assert.equal(usage.windows[1].aside, true);
   assert.equal(usage.windows[1].display, "3 次 · 12.5 积分");
@@ -96,4 +103,10 @@ test("usageFrom tolerates a missing stats object and missing credits", () => {
   assert.equal(usage.windows.length, 1);
   assert.equal(usage.windows[0].balance, 0);
   assert.equal(usage.balance, "0 积分");
+});
+test("a zero lifetime cost falls back to a plain balance window", () => {
+  const usage = I.usageFrom({ username: "alice", credits: 100 }, { total_cost: 0, daily: [] });
+  assert.equal(usage.windows[0].name, "积分余额");
+  assert.equal(usage.windows[0].balance, 100);
+  assert.equal(usage.windows[0].amount, undefined);
 });
