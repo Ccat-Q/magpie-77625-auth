@@ -32,14 +32,14 @@ test("usage maps credits and today's calls into balance windows", async () => {
   assert.equal(usage.user, "alice");
   assert.equal(usage.balance, `${I.formatCredits(1234.5)} 积分`);
   assert.equal(usage.windows.length, 2);
-  assert.equal(usage.windows[0].name, "积分余额（估算）");
+  assert.equal(usage.windows[0].name, "积分用量（估算）");
   assert.equal(usage.windows[0].amount, 500);
   assert.equal(usage.windows[0].limit, 1734.5);
   assert.ok(Math.abs(usage.windows[0].used - (500 / 1734.5) * 100) < 0.0001);
   assert.equal(usage.windows[0].unit, "积分");
   assert.equal(
     usage.windows[0].display,
-    `${I.formatCredits(1234.5)} / ${I.formatCredits(1734.5)} 积分`,
+    `${I.formatCredits(500)} / ${I.formatCredits(1734.5)} 积分`,
   );
   assert.equal(usage.windows[1].name, "今日");
   assert.equal(usage.windows[1].aside, true);

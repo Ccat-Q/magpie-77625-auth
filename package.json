@@ -1,6 +1,6 @@
 {
   "name": "magpie-77625-auth",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Magpie/OpenCode provider plugin for 77625 Router: sign-in, daily check-in credits and remaining balance.",
   "type": "module",
   "main": "./index.mjs",
