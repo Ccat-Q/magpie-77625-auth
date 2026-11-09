@@ -32,7 +32,7 @@ test("usage maps credits and today's calls into balance windows", async () => {
   assert.equal(usage.user, "alice");
   assert.equal(usage.balance, `${I.formatCredits(1234.5)} 积分`);
   assert.equal(usage.windows.length, 2);
-  assert.equal(usage.windows[0].name, "积分用量（估算）");
+  assert.equal(usage.windows[0].name, "积分用量");
   assert.equal(usage.windows[0].amount, 500);
   assert.equal(usage.windows[0].limit, 1734.5);
   assert.ok(Math.abs(usage.windows[0].used - (500 / 1734.5) * 100) < 0.0001);
@@ -109,4 +109,20 @@ test("a zero lifetime cost falls back to a plain balance window", () => {
   assert.equal(usage.windows[0].name, "积分余额");
   assert.equal(usage.windows[0].balance, 100);
   assert.equal(usage.windows[0].amount, undefined);
+});
+
+test("the usage percentage follows the current total and fills at zero balance", () => {
+  const full = I.usageFrom({ username: "alice", credits: 0 }, { total_cost: 1000 });
+  assert.equal(full.windows[0].limit, 1000);
+  assert.equal(full.windows[0].amount, 1000);
+  assert.equal(full.windows[0].used, 100);
+  assert.equal(full.windows[0].display, "1,000 / 1,000 积分");
+
+  const half = I.usageFrom({ username: "alice", credits: 100 }, { total_cost: 900 });
+  assert.equal(half.windows[0].limit, 1000);
+  assert.equal(half.windows[0].used, 90);
+
+  const toppedUp = I.usageFrom({ username: "alice", credits: 500 }, { total_cost: 500 });
+  assert.equal(toppedUp.windows[0].limit, 1000);
+  assert.equal(toppedUp.windows[0].used, 50);
 });
